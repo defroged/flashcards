@@ -244,12 +244,23 @@ function flipCard() {
 
 // Touchstart
 document.body.addEventListener('touchstart', (e) => {
+  // Disable swipe detection if score screen or success screen is active
+  if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
+    return;
+  }
+
   touchStartX = e.changedTouches[0].clientX;
   touchStartY = e.changedTouches[0].clientY;
 });
 
+
 // Touchend - determine swipe direction
 document.body.addEventListener('touchend', (e) => {
+  // Disable swipe detection if score screen or success screen is active
+  if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
+    return;
+  }
+
   const deltaX = e.changedTouches[0].clientX - touchStartX;
   const deltaY = e.changedTouches[0].clientY - touchStartY;
   const absDeltaX = Math.abs(deltaX);
@@ -259,17 +270,18 @@ document.body.addEventListener('touchend', (e) => {
 
   // Check if horizontal or vertical is dominant
   if (absDeltaX > absDeltaY && absDeltaX > threshold) {
-  if (deltaX < 0) {
-    // Swipe left => mark correct
-    markCardCorrect();
+    if (deltaX < 0) {
+      // Swipe left => mark correct
+      markCardCorrect();
+    }
+  } else if (absDeltaY > absDeltaX && absDeltaY > threshold) {
+    if (deltaY > 0) {
+      // Swipe down => mark incorrect
+      markCardIncorrect();
+    }
   }
-} else if (absDeltaY > absDeltaX && absDeltaY > threshold) {
-  if (deltaY > 0) {
-    // Swipe down => mark incorrect
-    markCardIncorrect();
-  }
-}
 });
+
 
 function markCardCorrect() {
   showCheckmark("✔", "limegreen");
