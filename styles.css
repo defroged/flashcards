@@ -52,10 +52,7 @@ body {
 }
 .card__face.side3 {
   background: #444;
-  /* We rotate it an additional 180deg from side2, i.e. 360 total, 
-     so the transition looks continuous.
-     You could also do rotateY(-180deg), etc. for variations. */
-  transform: rotateY(360deg);
+  transform: rotateY(-180deg);
 }
 
 /* Score screen and success screen styling */

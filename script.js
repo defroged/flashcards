@@ -231,15 +231,12 @@ function flipCard() {
   }
 
   if (currentSide === 2) {
-    // Flip to side2
-    cardEl.style.transform = "rotateY(180deg)";
-  } else if (currentSide === 3) {
-    // Flip to side3
-    cardEl.style.transform = "rotateY(360deg)";
-  } else {
-    // Back to side1
-    cardEl.style.transform = "rotateY(0deg)";
-  }
+  cardEl.style.transform = "rotateY(180deg)";     // Show side2
+} else if (currentSide === 3) {
+  cardEl.style.transform = "rotateY(-180deg)";    // Show side3
+} else {
+  cardEl.style.transform = "rotateY(0deg)";       // Show side1
+}
 }
 
 // Touchstart
@@ -259,16 +256,16 @@ document.body.addEventListener('touchend', (e) => {
 
   // Check if horizontal or vertical is dominant
   if (absDeltaX > absDeltaY && absDeltaX > threshold) {
-    if (deltaX > 0) {
-      // Swipe right => mark correct
-      markCardCorrect();
-    }
-  } else if (absDeltaY > absDeltaX && absDeltaY > threshold) {
-    if (deltaY > 0) {
-      // Swipe down => mark incorrect
-      markCardIncorrect();
-    }
+  if (deltaX < 0) {
+    // Swipe left => mark correct
+    markCardCorrect();
   }
+} else if (absDeltaY > absDeltaX && absDeltaY > threshold) {
+  if (deltaY > 0) {
+    // Swipe down => mark incorrect
+    markCardIncorrect();
+  }
+}
 });
 
 function markCardCorrect() {
