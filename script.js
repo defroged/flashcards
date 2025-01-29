@@ -231,11 +231,14 @@ function flipCard() {
   }
 
   if (currentSide === 2) {
-  cardEl.style.transform = "rotateY(180deg)";     // Show side2
+  // Show side2 by rotating the card -120°
+  cardEl.style.transform = "rotateY(-120deg)";
 } else if (currentSide === 3) {
-  cardEl.style.transform = "rotateY(-180deg)";    // Show side3
+  // Show side3 by rotating the card -240°
+  cardEl.style.transform = "rotateY(-240deg)";
 } else {
-  cardEl.style.transform = "rotateY(0deg)";       // Show side1
+  // Back to side1 (0°)
+  cardEl.style.transform = "rotateY(0deg)";
 }
 }
 

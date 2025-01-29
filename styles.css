@@ -45,15 +45,19 @@ body {
 /* Different background shades for each side so the flip is visually distinct */
 .card__face.side1 {
   background: #222; 
+  transform: rotateY(0deg) translateZ(100px);
 }
+
 .card__face.side2 {
   background: #333;
-  transform: rotateY(180deg);
+  transform: rotateY(120deg) translateZ(100px);
 }
+
 .card__face.side3 {
   background: #444;
-  transform: rotateY(-180deg);
+  transform: rotateY(240deg) translateZ(100px);
 }
+
 
 /* Score screen and success screen styling */
 #score-screen, #success-screen {
