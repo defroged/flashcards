@@ -152,12 +152,18 @@ function init() {
 function updateCardContent() {
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
-    // Show results screen
+  // If all cards were marked correct, show success right away
+  if (correctCount === currentDeck.length) {
+    successScreen.style.display = "block";
+  } else {
+    // Otherwise, show the score screen
     const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
     scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
     scoreScreen.style.display = "block";
-    return;
   }
+  return;
+}
+
 
   const cardData = currentDeck[currentIndex];
 
@@ -194,27 +200,22 @@ function playAudio(url) {
 // Click (tap) to flip among sides
 document.body.addEventListener('click', (e) => {
   // If we are on the score screen and user taps:
-  if (scoreScreen.style.display === "block") {
-    scoreScreen.style.display = "none";
-    // If no incorrect cards, user got them all correct => show success
-    if (incorrectDeck.length === 0) {
-      successScreen.style.display = "block";
-    } else {
-      // Otherwise repeat only the incorrect deck
-      currentDeck = shuffleArray([...incorrectDeck]);
-      incorrectDeck = [];
-      currentIndex = 0;
-      correctCount = 0;
-      updateCardContent();
-    }
-    return;
-  }
+if (scoreScreen.style.display === "block") {
+  scoreScreen.style.display = "none";
+  // Repeat only the incorrect deck:
+  currentDeck = shuffleArray([...incorrectDeck]);
+  incorrectDeck = [];
+  currentIndex = 0;
+  correctCount = 0;
+  updateCardContent();
+  return;
+}
 
-  // If we are on the success screen and user taps, maybe restart from scratch:
-  if (successScreen.style.display === "block") {
-    init();
-    return;
-  }
+// If we are on the success screen and user taps => restart from scratch:
+if (successScreen.style.display === "block") {
+  init();
+  return;
+}
 
   // If user clicked on a play button, do NOT flip
   if (e.target.classList.contains("play-button")) {
