@@ -99,38 +99,45 @@ function shuffleArray(array) {
 // **********************************
 // 5) Main init flow
 // **********************************
-async function init() {
-  // 5a) Identify the last path segment as a "slug":
-  const pathSegments = window.location.pathname.split("/");
-  const slug = pathSegments[pathSegments.length - 1];
+// ***********************
+// Replace init() and fetchDataFromFirestore():
+// ***********************
 
-  // 5b) If slug is the same as the root or is empty, use fallback data:
-  if (!slug || slug === "") {
-    cardsData = fallbackCardsData;
-    // Proceed with the regular deck workflow
-    startDeck();
-  } else {
-    // We have a slug => fetch from Firestore
-    const fetchedData = await fetchDataFromFirestore(slug);
-    // If nothing returned, fallback so the deck won’t be empty
+async function init() {
+  // Get all path segments, ignoring empty ones
+  const pathSegments = window.location.pathname.split("/").filter(Boolean);
+
+  // If we have at least 2 segments, we assume the first is "classSlug" and the second is "timeSlug"
+  if (pathSegments.length >= 2) {
+    const classSlug = pathSegments[0];
+    const timeSlug = pathSegments[1];
+
+    // Attempt Firestore fetch with those slugs
+    const fetchedData = await fetchDataFromFirestore(classSlug, timeSlug);
+
+    // If nothing returned, fallback to your hard-coded data
     if (fetchedData.length === 0) {
       cardsData = fallbackCardsData;
     } else {
       cardsData = fetchedData;
     }
     startDeck();
+  } 
+  else {
+    // If we don’t have 2 segments, fallback to the hard-coded data
+    cardsData = fallbackCardsData;
+    startDeck();
   }
 }
 
-// **********************************
-// 6) Fetch data from Firestore
-// **********************************
-async function fetchDataFromFirestore(slug) {
+async function fetchDataFromFirestore(classSlug, timeSlug) {
   try {
-    // Example: We use "Vocabulary" collection, doc(slug), subcollection("Vocabulary")
+    // We'll read: "Academic-classes" / classSlug / "Submissions" / timeSlug / "Vocabulary"
     const subcollectionRef = db
-      .collection("Vocabulary")
-      .doc(slug)
+      .collection("Academic-classes")
+      .doc(classSlug)
+      .collection("Submissions")
+      .doc(timeSlug)
       .collection("Vocabulary");
 
     const querySnapshot = await subcollectionRef.get();
@@ -138,7 +145,7 @@ async function fetchDataFromFirestore(slug) {
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      // We parse the database fields to match our card structure:
+      // Map the fields to the structure your flashcards need:
       results.push({
         jp: data.japanese || "",
         en: data.english || "",
@@ -154,6 +161,7 @@ async function fetchDataFromFirestore(slug) {
     return [];
   }
 }
+
 
 // **********************************
 // 7) Once we have cardsData, build the deck
