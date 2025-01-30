@@ -180,7 +180,11 @@ async function fetchDataFromFirestore(classSlug, timeSlug) {
 // 7) Once we have cardsData, build the deck
 // **********************************
 function startDeck() {
+  console.log("🚀 startDeck() started");
+  console.log("🔍 Current Deck Before Shuffle:", cardsData);
+
   currentDeck = shuffleArray([...cardsData]);
+  console.log("🔀 Shuffled Deck:", currentDeck);
   incorrectDeck = [];
   currentIndex = 0;
   correctCount = 0;
@@ -192,8 +196,12 @@ function startDeck() {
 }
 
 function updateCardContent() {
+	  console.log("🃏 updateCardContent() called");
+  console.log("📌 Current Index:", currentIndex);
+  console.log("🃏 Current Deck Length:", currentDeck.length);
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
+	  console.warn("⚠️ No more cards left in the deck!");
     // If all cards were marked correct, show success right away
     if (correctCount === currentDeck.length) {
       successScreen.style.display = "block";
@@ -207,6 +215,7 @@ function updateCardContent() {
   }
 
   const cardData = currentDeck[currentIndex];
+    console.log("🎴 Card Data at Index:", cardData);
 
   side1El.textContent = cardData.jp;
 
@@ -236,6 +245,11 @@ function updateCardContent() {
 // 8) Audio playback
 // **********************************
 function playAudio(url) {
+  console.log("🎵 playAudio() called with URL:", url);
+  if (!url) {
+    console.warn("🚨 No audio URL provided!");
+    return;
+  }
   const audio = new Audio(url);
   audio.play();
 }
