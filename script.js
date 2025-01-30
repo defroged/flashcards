@@ -216,6 +216,7 @@ function updateCardContent() {
 
   const cardData = currentDeck[currentIndex];
     console.log("🎴 Card Data at Index:", cardData);
+	  console.log(`🔊 Audio URL for card #${currentIndex}:`, cardData.enAudio);
 
   side1El.textContent = cardData.jp;
 
