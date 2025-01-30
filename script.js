@@ -155,17 +155,16 @@ async function fetchDataFromFirestore(classSlug, timeSlug) {
 
     const results = [];
 
-    vocabArray.forEach((item) => {
-      // Each 'item' might have: english, englishExample, japanese, japaneseExample
-      results.push({
-        jp: item.japanese || "",
-        en: item.english || "",
-        // placeholder audio
-        enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/jumping.mp3",
-        sentenceEn: item.englishExample || "",
-        sentenceJp: item.japaneseExample || ""
-      });
-    });
+vocabArray.forEach((item) => {
+  results.push({
+    jp: item.japanese || "",
+    en: item.english || "",
+    enAudio: item.enAudio || "", // 🔥 Use the actual enAudio from Firestore!
+    sentenceEn: item.englishExample || "",
+    sentenceJp: item.japaneseExample || ""
+  });
+});
+
 
     return results;
   } catch (error) {
