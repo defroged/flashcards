@@ -132,26 +132,38 @@ async function init() {
 
 async function fetchDataFromFirestore(classSlug, timeSlug) {
   try {
-    // We'll read: "Academic-classes" / classSlug / "Submissions" / timeSlug / "Vocabulary"
-    const subcollectionRef = db
+    // We'll read the single doc:
+    // Academic-classes / classSlug / Submissions / timeSlug
+    const docRef = db
       .collection("Academic-classes")
       .doc(classSlug)
       .collection("Submissions")
-      .doc(timeSlug)
-      .collection("Vocabulary");
+      .doc(timeSlug);
 
-    const querySnapshot = await subcollectionRef.get();
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      console.log("No such document:", classSlug, timeSlug);
+      return [];
+    }
+
+    // We'll assume the doc has a field "Vocabulary" that is an array
+    const data = docSnap.data();
+    const vocabArray = data.Vocabulary || []; // or possibly data.vocabulary
+
+    console.log("Vocabulary array length:", vocabArray.length);
+
     const results = [];
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      // Map the fields to the structure your flashcards need:
+    vocabArray.forEach((item) => {
+      // Each 'item' might have: english, englishExample, japanese, japaneseExample
       results.push({
-        jp: data.japanese || "",
-        en: data.english || "",
-        enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/jumping.mp3", // placeholder
-        sentenceEn: data.englishExample || "",
-        sentenceJp: data.japaneseExample || ""
+        jp: item.japanese || "",
+        en: item.english || "",
+        // placeholder audio
+        enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/jumping.mp3",
+        sentenceEn: item.englishExample || "",
+        sentenceJp: item.japaneseExample || ""
       });
     });
 
@@ -161,6 +173,7 @@ async function fetchDataFromFirestore(classSlug, timeSlug) {
     return [];
   }
 }
+
 
 
 // **********************************
