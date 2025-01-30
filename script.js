@@ -1,5 +1,27 @@
-// Hard-coded flashcard data
-const cardsData = [
+// **********************************
+// 1) Firebase config & initialization
+// **********************************
+
+// (If you already have these scripts in your HTML, you do not need to add them again, 
+// but you do need to ensure these lines run somewhere in your JS.)
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCTdo6AfCDj3yVCnndBCIOrLRm7oOaDFW8",
+  authDomain: "bs-class-database.firebaseapp.com",
+  projectId: "bs-class-database",
+  storageBucket: "bs-class-database.firebasestorage.app",
+  messagingSenderId: "577863988524",
+  appId: "1:577863988524:web:dc28f58ed0350419d62889"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// **********************************
+// 2) Fallback data if no slug is provided
+// **********************************
+const fallbackCardsData = [
   {
     jp: "ゾウ",
     en: "elephant",
@@ -28,76 +50,7 @@ const cardsData = [
     sentenceEn: "The cat is sleeping under the tree.",
     sentenceJp: "猫が木の下で寝ています。"
   },
-  {
-    jp: "ケーキ",
-    en: "cake",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2022/07/cake.mp3",
-    sentenceEn: "She is baking a delicious cake.",
-    sentenceJp: "彼女がおいしいケーキを焼いています。"
-  },
-  {
-    jp: "濡れている",
-    en: "wet",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/wet.mp3",
-    sentenceEn: "My clothes are wet because of the rain.",
-    sentenceJp: "雨のせいで服が濡れています。"
-  },
-  {
-    jp: "地図",
-    en: "map",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/map.mp3",
-    sentenceEn: "He is looking at a map to find the way.",
-    sentenceJp: "彼は道を探すために地図を見ています。"
-  },
-  {
-    jp: "ニワトリ",
-    en: "hen",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/hen.mp3",
-    sentenceEn: "The hen is laying eggs in the barn.",
-    sentenceJp: "ニワトリが納屋で卵を産んでいます。"
-  },
-  {
-    jp: "ハム",
-    en: "ham",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/ham.mp3",
-    sentenceEn: "We had ham sandwiches for lunch.",
-    sentenceJp: "昼ごはんにハムサンドを食べました。"
-  },
-  {
-    jp: "登る",
-    en: "climbing",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/climbing.mp3",
-    sentenceEn: "They are climbing the mountain together.",
-    sentenceJp: "彼らは一緒に山を登っています。"
-  },
-  {
-    jp: "捕まえる",
-    en: "catching",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/catching.mp3",
-    sentenceEn: "The children are catching butterflies in the field.",
-    sentenceJp: "子どもたちが野原で蝶を捕まえています。"
-  },
-  {
-    jp: "歩く",
-    en: "walking",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/walking.mp3",
-    sentenceEn: "She is walking to school every morning.",
-    sentenceJp: "彼女は毎朝学校まで歩いています。"
-  },
-  {
-    jp: "スキップする",
-    en: "skipping",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/skipping.mp3",
-    sentenceEn: "The kids are skipping rope in the park.",
-    sentenceJp: "子どもたちが公園で縄跳びをしています。"
-  },
-  {
-    jp: "走る",
-    en: "running",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/running.mp3",
-    sentenceEn: "The boys are running around the playground.",
-    sentenceJp: "男の子たちが遊び場を走り回っています。"
-  },
+  // ... (rest of your hard‐coded objects) ...
   {
     jp: "跳ぶ",
     en: "jumping",
@@ -107,9 +60,13 @@ const cardsData = [
   }
 ];
 
-// We'll use the same audio for all example sentences for now:
+// We'll use the same audio for all example sentences for now
 const exampleSentenceAudio = "https://www.bluestar-english.com/wp-content/uploads/2020/05/brush-my-teeth.mp3";
 
+// **********************************
+// 3) Variables for deck management
+// **********************************
+let cardsData = [];
 let currentDeck = [];
 let incorrectDeck = [];
 let currentIndex = 0;
@@ -128,6 +85,9 @@ const successScreen = document.getElementById('success-screen');
 let touchStartX = 0;
 let touchStartY = 0;
 
+// **********************************
+// 4) Utility: shuffle array
+// **********************************
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -136,8 +96,69 @@ function shuffleArray(array) {
   return array;
 }
 
-function init() {
-  // Shuffle the main deck
+// **********************************
+// 5) Main init flow
+// **********************************
+async function init() {
+  // 5a) Identify the last path segment as a "slug":
+  const pathSegments = window.location.pathname.split("/");
+  const slug = pathSegments[pathSegments.length - 1];
+
+  // 5b) If slug is the same as the root or is empty, use fallback data:
+  if (!slug || slug === "") {
+    cardsData = fallbackCardsData;
+    // Proceed with the regular deck workflow
+    startDeck();
+  } else {
+    // We have a slug => fetch from Firestore
+    const fetchedData = await fetchDataFromFirestore(slug);
+    // If nothing returned, fallback so the deck won’t be empty
+    if (fetchedData.length === 0) {
+      cardsData = fallbackCardsData;
+    } else {
+      cardsData = fetchedData;
+    }
+    startDeck();
+  }
+}
+
+// **********************************
+// 6) Fetch data from Firestore
+// **********************************
+async function fetchDataFromFirestore(slug) {
+  try {
+    // Example: We use "Vocabulary" collection, doc(slug), subcollection("Vocabulary")
+    const subcollectionRef = db
+      .collection("Vocabulary")
+      .doc(slug)
+      .collection("Vocabulary");
+
+    const querySnapshot = await subcollectionRef.get();
+    const results = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      // We parse the database fields to match our card structure:
+      results.push({
+        jp: data.japanese || "",
+        en: data.english || "",
+        enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/jumping.mp3", // placeholder
+        sentenceEn: data.englishExample || "",
+        sentenceJp: data.japaneseExample || ""
+      });
+    });
+
+    return results;
+  } catch (error) {
+    console.error("Error fetching Firestore data:", error);
+    return [];
+  }
+}
+
+// **********************************
+// 7) Once we have cardsData, build the deck
+// **********************************
+function startDeck() {
   currentDeck = shuffleArray([...cardsData]);
   incorrectDeck = [];
   currentIndex = 0;
@@ -152,18 +173,17 @@ function init() {
 function updateCardContent() {
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
-  // If all cards were marked correct, show success right away
-  if (correctCount === currentDeck.length) {
-    successScreen.style.display = "block";
-  } else {
-    // Otherwise, show the score screen
-    const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
-    scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
-    scoreScreen.style.display = "block";
+    // If all cards were marked correct, show success right away
+    if (correctCount === currentDeck.length) {
+      successScreen.style.display = "block";
+    } else {
+      // Otherwise, show the score screen
+      const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
+      scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
+      scoreScreen.style.display = "block";
+    }
+    return;
   }
-  return;
-}
-
 
   const cardData = currentDeck[currentIndex];
 
@@ -191,31 +211,36 @@ function updateCardContent() {
   cardEl.style.transform = "rotateY(0deg)";
 }
 
-// Play audio (English word or example sentence)
+// **********************************
+// 8) Audio playback
+// **********************************
 function playAudio(url) {
   const audio = new Audio(url);
   audio.play();
 }
 
-// Click (tap) to flip among sides
+// **********************************
+// 9) Tap/click events to flip or restart decks
+// **********************************
 document.body.addEventListener('click', (e) => {
   // If we are on the score screen and user taps:
-if (scoreScreen.style.display === "block") {
-  scoreScreen.style.display = "none";
-  // Repeat only the incorrect deck:
-  currentDeck = shuffleArray([...incorrectDeck]);
-  incorrectDeck = [];
-  currentIndex = 0;
-  correctCount = 0;
-  updateCardContent();
-  return;
-}
+  if (scoreScreen.style.display === "block") {
+    scoreScreen.style.display = "none";
+    // Repeat only the incorrect deck:
+    currentDeck = shuffleArray([...incorrectDeck]);
+    incorrectDeck = [];
+    currentIndex = 0;
+    correctCount = 0;
+    updateCardContent();
+    return;
+  }
 
-// If we are on the success screen and user taps => restart from scratch:
-if (successScreen.style.display === "block") {
-  init();
-  return;
-}
+  // If we are on the success screen and user taps => restart from scratch
+  if (successScreen.style.display === "block") {
+    // Start again with the same deck (no new Firestore fetch unless user refreshes)
+    startDeck();
+    return;
+  }
 
   // If user clicked on a play button, do NOT flip
   if (e.target.classList.contains("play-button")) {
@@ -232,18 +257,20 @@ function flipCard() {
   }
 
   if (currentSide === 2) {
-  // Show side2 by rotating the card -120°
-  cardEl.style.transform = "rotateY(-120deg)";
-} else if (currentSide === 3) {
-  // Show side3 by rotating the card -240°
-  cardEl.style.transform = "rotateY(-240deg)";
-} else {
-  // Back to side1 (0°)
-  cardEl.style.transform = "rotateY(0deg)";
-}
+    // Show side2 by rotating the card -120°
+    cardEl.style.transform = "rotateY(-120deg)";
+  } else if (currentSide === 3) {
+    // Show side3 by rotating the card -240°
+    cardEl.style.transform = "rotateY(-240deg)";
+  } else {
+    // Back to side1 (0°)
+    cardEl.style.transform = "rotateY(0deg)";
+  }
 }
 
-// Touchstart
+// **********************************
+// 10) Touch events for swipe
+// **********************************
 document.body.addEventListener('touchstart', (e) => {
   // Disable swipe detection if score screen or success screen is active
   if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
@@ -254,8 +281,6 @@ document.body.addEventListener('touchstart', (e) => {
   touchStartY = e.changedTouches[0].clientY;
 });
 
-
-// Touchend - determine swipe direction
 document.body.addEventListener('touchend', (e) => {
   // Disable swipe detection if score screen or success screen is active
   if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
@@ -283,7 +308,9 @@ document.body.addEventListener('touchend', (e) => {
   }
 });
 
-
+// **********************************
+// 11) Mark cards correct or incorrect
+// **********************************
 function markCardCorrect() {
   showCheckmark("✔", "limegreen");
   correctCount++;
@@ -309,5 +336,7 @@ function showCheckmark(symbol, color = "limegreen") {
   }, 1000);
 }
 
-// Initialize on page load
+// **********************************
+// 12) Kick things off on page load
+// **********************************
 init();
