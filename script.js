@@ -60,9 +60,6 @@ const fallbackCardsData = [
   }
 ];
 
-// We'll use the same audio for all example sentences for now
-const exampleSentenceAudio = "https://www.bluestar-english.com/wp-content/uploads/2020/05/brush-my-teeth.mp3";
-
 // **********************************
 // 3) Variables for deck management
 // **********************************
@@ -227,14 +224,14 @@ function updateCardContent() {
     </div>
   `;
 
-  // side3 with example sentence + audio
-  side3El.innerHTML = `
-    <div>
-      <p>${cardData.sentenceEn}</p>
-      <p>${cardData.sentenceJp}</p>
-      <button class="play-button" onclick="playAudio('${exampleSentenceAudio}')">Play</button>
-    </div>
-  `;
+// side3 with example sentences (without audio button)
+side3El.innerHTML = `
+  <div>
+    <p>${cardData.sentenceEn}</p>
+    <p>${cardData.sentenceJp}</p>
+  </div>
+`;
+
 
   // Reset to side1 (Japanese)
   currentSide = 1;
