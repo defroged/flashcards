@@ -219,9 +219,11 @@ function updateCardContent() {
   // side2 with text + audio
   side2El.innerHTML = `
     <div>
-      <p>${cardData.en}</p>
-      <button class="play-button" onclick="playAudio('${cardData.enAudio}')">Play</button>
-    </div>
+    <p>${cardData.en}</p>
+    <button class="play-button" onclick="playAudio('${cardData.enAudio}')">
+        <i class="fa-solid fa-headphones"></i>
+    </button>
+</div>
   `;
 
 // side3 with example sentences (without audio button)

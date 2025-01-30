@@ -40,6 +40,7 @@ body {
   align-items: center;
   text-align: center;
   padding: 20px;
+  font-size: 24px;
 }
 
 /* Different background shades for each side so the flip is visually distinct */
@@ -76,18 +77,18 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 70px;
 }
 
 
 /* Checkmark / X mark that shows when swiping */
 .checkmark {
   position: absolute;
-  top: 10px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   color: limegreen;
-  font-size: 2rem;
+  font-size: 4rem;
   animation: fadeOut 1s forwards; /* will fade out after 1s */
 }
 @keyframes fadeOut {
