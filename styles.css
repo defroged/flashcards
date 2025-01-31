@@ -94,12 +94,13 @@ body {
 }
 
 .checkmark.correct {
-  color: limegreen !important; /* Ensures green for correct answers */
+  color: #32CD32 !important; /* Ensures green for correct answers */
 }
 
 .checkmark.incorrect {
-  color: red !important; /* Ensures red for incorrect answers */
+  color: #FF0000 !important; /* Ensures red for incorrect answers */
 }
+
 
 
 @keyframes fadeOut {

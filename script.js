@@ -363,8 +363,13 @@ function markCardIncorrect() {
 function showCheckmark(symbol, color) {
   const mark = document.createElement('div');
   mark.classList.add('checkmark');
-  mark.classList.add(color === "red" ? "incorrect" : "correct"); // Assigns red for X, green for ✔
-  
+
+  if (color === "red") {
+    mark.classList.add("incorrect"); // Explicitly setting incorrect class for X
+  } else {
+    mark.classList.add("correct"); // Explicitly setting correct class for ✔
+  }
+
   mark.textContent = symbol;
   document.body.appendChild(mark);
 
@@ -372,6 +377,7 @@ function showCheckmark(symbol, color) {
     document.body.removeChild(mark);
   }, 1000);
 }
+
 
 
 
