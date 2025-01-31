@@ -360,19 +360,11 @@ function markCardIncorrect() {
   updateCardContent();
 }
 
-function showCheckmark(symbol, color = "limegreen") {
+function showCheckmark(symbol, color) {
   const mark = document.createElement('div');
   mark.classList.add('checkmark');
-  mark.style.color = color;
-  mark.style.fontSize = "4rem";
-  mark.style.fontWeight = "bold";
-  mark.style.position = "fixed";
-  mark.style.top = "50%";
-  mark.style.left = "50%";
-  mark.style.transform = "translate(-50%, -50%)";
-  mark.style.zIndex = "10000"; // Ensure it's above everything
-  mark.style.textShadow = `2px 2px 5px ${color === "red" ? "rgba(255, 0, 0, 0.5)" : "rgba(0, 255, 0, 0.5)"}`; // Glow effect
-
+  mark.classList.add(color === "red" ? "incorrect" : "correct"); // Assigns red for X, green for ✔
+  
   mark.textContent = symbol;
   document.body.appendChild(mark);
 
@@ -380,6 +372,7 @@ function showCheckmark(symbol, color = "limegreen") {
     document.body.removeChild(mark);
   }, 1000);
 }
+
 
 
 // **********************************

@@ -87,13 +87,20 @@ body {
   top: 100px;
   left: 50%;
   transform: translateX(-50%);
-  color: limegreen !important; /* Force the color */
   font-size: 4rem;
   font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0, 255, 0, 0.5); /* Add glow effect for visibility */
-  animation: fadeOut 1s forwards;
+  animation: fadeOut 1s forwards; /* Still fades out after 1s */
   z-index: 10000; /* Ensure it appears above everything */
 }
+
+.checkmark.correct {
+  color: limegreen !important; /* Ensures green for correct answers */
+}
+
+.checkmark.incorrect {
+  color: red !important; /* Ensures red for incorrect answers */
+}
+
 
 @keyframes fadeOut {
   0% { opacity: 1; }
