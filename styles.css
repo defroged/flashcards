@@ -75,7 +75,8 @@ body {
 /* Score screen and success screen styling */
 #score-screen,
 #success-screen {
-  display: none;
+  visibility: hidden; /* Prevents brief flashes */
+  opacity: 0; /* Ensures it starts hidden */
   position: fixed;
   top: 0;
   left: 0;
@@ -90,7 +91,9 @@ body {
   justify-content: center;
   align-items: center;
   padding: 70px;
+  transition: opacity 0.3s ease-in-out; /* Smooth transition */
 }
+
 
 
 /* Checkmark / X mark that shows when swiping */

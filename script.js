@@ -78,6 +78,14 @@ const scoreScreen = document.getElementById('score-screen');
 const scoreText = document.getElementById('score-text');
 const successScreen = document.getElementById('success-screen');
 
+// Ensure screens are hidden properly on page load
+window.onload = () => {
+  scoreScreen.style.visibility = "hidden";
+  scoreScreen.style.opacity = "0";
+  successScreen.style.visibility = "hidden";
+  successScreen.style.opacity = "0";
+};
+
 // For swipe detection
 let touchStartX = 0;
 let touchStartY = 0;
@@ -185,8 +193,11 @@ function startDeck() {
   currentIndex = 0;
   correctCount = 0;
   currentSide = 1;
-  scoreScreen.style.display = "none";
-  successScreen.style.display = "none";
+scoreScreen.style.visibility = "hidden";
+scoreScreen.style.opacity = "0";
+successScreen.style.visibility = "hidden";
+successScreen.style.opacity = "0";
+
 
   updateCardContent();
 }
@@ -200,7 +211,9 @@ function updateCardContent() {
 	  console.warn("⚠️ No more cards left in the deck!");
     // If all cards were marked correct, show success right away
     if (correctCount === currentDeck.length) {
-      successScreen.style.display = "block";
+      successScreen.style.visibility = "visible";
+successScreen.style.opacity = "1";
+
     } else {
       // Otherwise, show the score screen
       const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
@@ -270,10 +283,13 @@ document.body.addEventListener('click', (e) => {
   }
 
   // If we are on the success screen and user taps => restart from scratch
-  if (successScreen.style.display === "block") {
-    startDeck();
-    return;
-  }
+  if (successScreen.style.visibility === "visible") {
+  successScreen.style.visibility = "hidden";
+  successScreen.style.opacity = "0";
+  startDeck();
+  return;
+}
+
 
   // Check if click happened inside the play button or its children (icon inside button)
   const playButton = e.target.closest(".play-button");
