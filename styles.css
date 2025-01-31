@@ -12,6 +12,14 @@ body {
   overflow: hidden; /* Keep the screen from scrolling for this demo */
 }
 
+h1 {
+  font-size: 92px;  /* Adjust text size */
+  font-weight: bold; /* Set the font weight */
+  color: greenyellow;    /* Change text color */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 /* Container to hold the 3D card */
 #card-container {
   position: relative;
