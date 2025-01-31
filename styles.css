@@ -17,7 +17,7 @@ body {
   position: relative;
   width: 100%;
   max-width: 400px;
-  height: 250px;
+  height: 400px;
   margin: 100px auto;
   perspective: 1000px; /* for 3D flip */
 }
@@ -46,6 +46,14 @@ body {
 .card__face p {
  margin: 0px 20px; 
 }
+
+
+.card__face p:last-child { 
+  margin-top: 20px;
+  color: #FFA07A; /* Light salmon for Japanese sentence */
+ font-size: 25px
+}
+
 
 /* Different background shades for each side so the flip is visually distinct */
 .card__face.side1 {
@@ -115,7 +123,7 @@ body {
 /* Play button styling */
 .play-button {
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 22px;
   padding: 15px 20px;
   background: #66666640;
   color: #ffc003;
