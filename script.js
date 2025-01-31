@@ -350,8 +350,24 @@ function markCardCorrect() {
   showCheckmark("✅", "limegreen");
   correctCount++;
   currentIndex++;
+
+  // Prevent flip animation if the card was flipped
+  const wasFlipped = currentSide !== 1;
+  currentSide = 1; // Reset side
   updateCardContent();
+
+  if (wasFlipped) {
+    // Instantly reset without animation
+    cardEl.style.transition = "none";
+    cardEl.style.transform = "rotateY(0deg)";
+
+    // Restore transition after a short delay
+    setTimeout(() => {
+      cardEl.style.transition = "transform 0.6s ease";
+    }, 50);
+  }
 }
+
 
 function markCardIncorrect() {
   showCheckmark("✘", "red");
