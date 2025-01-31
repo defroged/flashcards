@@ -45,17 +45,17 @@ body {
 
 /* Different background shades for each side so the flip is visually distinct */
 .card__face.side1 {
-  background: #222; 
+  background: #2220; 
   transform: rotateY(0deg) translateZ(100px);
 }
 
 .card__face.side2 {
-  background: #333;
+  background: #3330;
   transform: rotateY(120deg) translateZ(100px);
 }
 
 .card__face.side3 {
-  background: #444;
+  background: #4440;
   transform: rotateY(240deg) translateZ(100px);
 }
 
@@ -94,13 +94,8 @@ body {
 }
 
 .checkmark.correct {
-  color: #32CD32 !important;
-  font-family: "Arial", "Helvetica", sans-serif; /* Force a system font that supports emoji colors */
-  font-weight: bold;
-  font-size: 4rem; /* Ensure it's large enough */
-  text-shadow: 0 0 10px rgba(50, 205, 50, 0.5); /* Adds a slight glow for visibility */
+  color: #32CD32 !important; /* Ensures green for correct answers */
 }
-
 
 .checkmark.incorrect {
   color: #FF0000 !important; /* Ensures red for incorrect answers */
