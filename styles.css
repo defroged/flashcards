@@ -40,7 +40,7 @@ body {
   align-items: center;
   text-align: center;
   padding: 20px;
-  font-size: 24px;
+  font-size: 34px;
 }
 
 /* Different background shades for each side so the flip is visually distinct */
@@ -99,13 +99,13 @@ body {
 /* Play button styling */
 .play-button {
   display: inline-block;
-  margin-top: 10px;
-  padding: 6px 12px;
+  margin-top: 20px;
+  padding: 15px 20px;
   background: #666;
-  color: #fff;
+  color: #ffc003;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 2rem;
 }
 .play-button:hover {
   background: #888;

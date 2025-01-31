@@ -271,18 +271,19 @@ document.body.addEventListener('click', (e) => {
 
   // If we are on the success screen and user taps => restart from scratch
   if (successScreen.style.display === "block") {
-    // Start again with the same deck (no new Firestore fetch unless user refreshes)
     startDeck();
     return;
   }
 
-  // If user clicked on a play button, do NOT flip
-  if (e.target.classList.contains("play-button")) {
-    return;
+  // Check if click happened inside the play button or its children (icon inside button)
+  const playButton = e.target.closest(".play-button");
+  if (playButton) {
+    return; // Prevent flipping when play button is clicked
   }
 
   flipCard();
 });
+
 
 function flipCard() {
   currentSide++;
