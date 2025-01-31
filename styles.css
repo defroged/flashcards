@@ -15,7 +15,7 @@ body {
 /* Container to hold the 3D card */
 #card-container {
   position: relative;
-  width: 80%;
+  width: 100%;
   max-width: 400px;
   height: 250px;
   margin: 100px auto;
@@ -113,7 +113,7 @@ body {
   display: inline-block;
   margin-top: 20px;
   padding: 15px 20px;
-  background: #666;
+  background: #66666640;
   color: #ffc003;
   border: none;
   cursor: pointer;
