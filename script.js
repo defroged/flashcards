@@ -347,7 +347,7 @@ document.body.addEventListener('touchend', (e) => {
 // 11) Mark cards correct or incorrect
 // **********************************
 function markCardCorrect() {
-  showCheckmark("✔", "limegreen");
+  showCheckmark("✅", "limegreen");
   correctCount++;
   currentIndex++;
   updateCardContent();
