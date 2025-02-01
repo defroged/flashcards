@@ -255,9 +255,12 @@ function updateCardContent() {
     </div>
   `;
 
-  // Reset to side1 (Japanese)
-  currentSide = 1;
-  cardEl.style.transform = "rotateY(0deg)";
+  // Reset to side1 (Japanese) without initial animation
+currentSide = 1;
+cardEl.style.transition = "none";              // Disable transition
+cardEl.style.transform = "rotateY(0deg)";        // Set to side1 immediately
+void cardEl.offsetWidth;                         // Force reflow to apply the change instantly
+cardEl.style.transition = "transform 0.6s ease";  // Re-enable the transition for future flips
 }
 
 
