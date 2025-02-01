@@ -20,6 +20,11 @@ h1 {
   margin-bottom: 20px;
 }
 
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  
+}
 /* Container to hold the 3D card full screen */
 #card-container {
   position: fixed;
