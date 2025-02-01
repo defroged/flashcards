@@ -333,7 +333,7 @@ function flipCard() {
 // **********************************
 document.body.addEventListener('touchstart', (e) => {
   // Disable swipe detection if score screen or success screen is active
-  if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
+  if (scoreScreen.style.display === "flex" || successScreen.style.visibility === "visible") {
     return;
   }
 
@@ -341,9 +341,10 @@ document.body.addEventListener('touchstart', (e) => {
   touchStartY = e.changedTouches[0].clientY;
 });
 
+
 document.body.addEventListener('touchend', (e) => {
   // Disable swipe detection if score screen or success screen is active
-  if (scoreScreen.style.display === "block" || successScreen.style.display === "block") {
+  if (scoreScreen.style.display === "flex" || successScreen.style.visibility === "visible") {
     return;
   }
 
@@ -367,6 +368,7 @@ document.body.addEventListener('touchend', (e) => {
     }
   }
 });
+
 
 // **********************************
 // 11) Mark cards correct or incorrect
