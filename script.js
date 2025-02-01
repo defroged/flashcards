@@ -212,21 +212,24 @@ function updateCardContent() {
   console.log("🃏 Current Deck Length:", currentDeck.length);
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
-    console.warn("⚠️ No more cards left in the deck!");
-    // Hide the card container to avoid accidental taps on the last card
-    document.getElementById('card-container').style.display = "none";
-    // If all cards were marked correct, show the success screen
-    if (correctCount === currentDeck.length) {
-      successScreen.style.visibility = "visible";
-      successScreen.style.opacity = "1";
-    } else {
-      // Otherwise, show the score screen with the percentage
-      const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
-      scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
-      scoreScreen.style.display = "flex";  // use flex per the CSS defaults
-    }
-    return;
+  console.warn("⚠️ No more cards left in the deck!");
+  // Hide the card container to avoid accidental taps on the last card
+  document.getElementById('card-container').style.display = "none";
+  // If all cards were marked correct, show the success screen
+  if (correctCount === currentDeck.length) {
+    successScreen.style.visibility = "visible";
+    successScreen.style.opacity = "1";
+  } else {
+    // Otherwise, show the score screen with the percentage
+    const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
+    scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
+    scoreScreen.style.display = "flex";  // use flex per the CSS defaults
+    scoreScreen.style.visibility = "visible";
+    scoreScreen.style.opacity = "1";
   }
+  return;
+}
+
 
   const cardData = currentDeck[currentIndex];
   console.log("🎴 Card Data at Index:", cardData);
