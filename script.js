@@ -414,6 +414,13 @@ function showCheckmark(symbol, color) {
 
 
 // **********************************
-// 12) Kick things off on page load
+// 12) Kick things off on page load via Start button
 // **********************************
-init();
+document.getElementById('start-button').addEventListener('click', () => {
+  // Hide the start screen
+  document.getElementById('start-screen').style.display = "none";
+  // Show the card container
+  document.getElementById('card-container').style.display = "block";
+  // Initialize the flashcards app
+  init();
+});

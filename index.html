@@ -11,14 +11,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </head>
 <body>
 
+  <!-- Start screen -->
+  <div id="start-screen">
+    <div id="instructions">
+      <p>1. Look at the Japanese word or phrase and say its meaning in English in your head or out loud 🤔👉🗣️</p>
+      <p>2. Tap once to reveal the answer 👆🔤.</p>
+      <p>3. If you were correct, swipe left to mark the card as correct ⬅️✅. If you were wrong, swipe down to mark the card as incorrect ⬇️❌.</p>
+      <p>* You can also tap the headphones icon to listen to the pronunciation of the word/phrase and practice it 👆🎧🗣️.</p>
+      <p>* Tap the card again to show an example sentence of the word/phrase along with its Japanese translation 👆📖.</p>
+      <p>4. Once you have finished marking all of the cards, the ones that were marked as incorrect will now repeat for you to practice 📈.</p>
+      <p>5. Continue this cycle until you get 💯%!</p>
+    </div>
+    <button id="start-button">Start</button>
+  </div>
+
   <!-- Card container (for the 3D flipping card) -->
-  <div id="card-container">
+  <div id="card-container" style="display: none;">
     <div id="card" class="card">
       <div id="side1" class="card__face side1"></div>
       <div id="side2" class="card__face side2"></div>
       <div id="side3" class="card__face side3"></div>
     </div>
   </div>
+
 
   <!-- Results screen (score) -->
   <div id="score-screen">
