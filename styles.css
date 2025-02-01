@@ -165,7 +165,7 @@ h1 {
   align-items: center;
   justify-content: center; /* Center content vertically */
   padding: 20px;
-  text-align: center;
+  text-align: left;
 }
 
 #start-screen #instructions {
@@ -191,3 +191,6 @@ h1 {
   transform: scale(1.05);
 }
 
+#instructions p {
+  line-height: 1.8; /* Adjust value as needed */
+}
