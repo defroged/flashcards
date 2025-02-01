@@ -193,65 +193,70 @@ function startDeck() {
   currentIndex = 0;
   correctCount = 0;
   currentSide = 1;
-scoreScreen.style.visibility = "hidden";
-scoreScreen.style.opacity = "0";
-successScreen.style.visibility = "hidden";
-successScreen.style.opacity = "0";
-
+  
+  // Reset ending screens and ensure card container is visible
+  scoreScreen.style.visibility = "hidden";
+  scoreScreen.style.opacity = "0";
+  scoreScreen.style.display = "none";
+  successScreen.style.visibility = "hidden";
+  successScreen.style.opacity = "0";
+  document.getElementById('card-container').style.display = "block";
 
   updateCardContent();
 }
 
+
 function updateCardContent() {
-	  console.log("🃏 updateCardContent() called");
+  console.log("🃏 updateCardContent() called");
   console.log("📌 Current Index:", currentIndex);
   console.log("🃏 Current Deck Length:", currentDeck.length);
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
-	  console.warn("⚠️ No more cards left in the deck!");
-    // If all cards were marked correct, show success right away
+    console.warn("⚠️ No more cards left in the deck!");
+    // Hide the card container to avoid accidental taps on the last card
+    document.getElementById('card-container').style.display = "none";
+    // If all cards were marked correct, show the success screen
     if (correctCount === currentDeck.length) {
       successScreen.style.visibility = "visible";
-successScreen.style.opacity = "1";
-
+      successScreen.style.opacity = "1";
     } else {
-      // Otherwise, show the score screen
+      // Otherwise, show the score screen with the percentage
       const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
       scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
-      scoreScreen.style.display = "block";
+      scoreScreen.style.display = "flex";  // use flex per the CSS defaults
     }
     return;
   }
 
   const cardData = currentDeck[currentIndex];
-    console.log("🎴 Card Data at Index:", cardData);
-	  console.log(`🔊 Audio URL for card #${currentIndex}:`, cardData.enAudio);
+  console.log("🎴 Card Data at Index:", cardData);
+  console.log(`🔊 Audio URL for card #${currentIndex}:`, cardData.enAudio);
 
   side1El.textContent = cardData.jp;
 
   // side2 with text + audio
   side2El.innerHTML = `
     <div>
-    <p>${cardData.en}</p>
-    <button class="play-button" onclick="playAudio('${cardData.enAudio}')">
+      <p>${cardData.en}</p>
+      <button class="play-button" onclick="playAudio('${cardData.enAudio}')">
         <i class="fa-solid fa-headphones"></i>
-    </button>
-</div>
+      </button>
+    </div>
   `;
 
-// side3 with example sentences (without audio button)
-side3El.innerHTML = `
-  <div>
-    <p>${cardData.sentenceEn}</p>
-    <p>${cardData.sentenceJp}</p>
-  </div>
-`;
-
+  // side3 with example sentences (without audio button)
+  side3El.innerHTML = `
+    <div>
+      <p>${cardData.sentenceEn}</p>
+      <p>${cardData.sentenceJp}</p>
+    </div>
+  `;
 
   // Reset to side1 (Japanese)
   currentSide = 1;
   cardEl.style.transform = "rotateY(0deg)";
 }
+
 
 // **********************************
 // 8) Audio playback
@@ -271,8 +276,10 @@ function playAudio(url) {
 // **********************************
 document.body.addEventListener('click', (e) => {
   // If we are on the score screen and user taps:
-  if (scoreScreen.style.display === "block") {
+  if (scoreScreen.style.display === "flex") {
     scoreScreen.style.display = "none";
+    // Show the card container again for the next cycle
+    document.getElementById('card-container').style.display = "block";
     // Repeat only the incorrect deck:
     currentDeck = shuffleArray([...incorrectDeck]);
     incorrectDeck = [];
@@ -284,12 +291,13 @@ document.body.addEventListener('click', (e) => {
 
   // If we are on the success screen and user taps => restart from scratch
   if (successScreen.style.visibility === "visible") {
-  successScreen.style.visibility = "hidden";
-  successScreen.style.opacity = "0";
-  startDeck();
-  return;
-}
-
+    successScreen.style.visibility = "hidden";
+    successScreen.style.opacity = "0";
+    // Show the card container again
+    document.getElementById('card-container').style.display = "block";
+    startDeck();
+    return;
+  }
 
   // Check if click happened inside the play button or its children (icon inside button)
   const playButton = e.target.closest(".play-button");
@@ -299,6 +307,7 @@ document.body.addEventListener('click', (e) => {
 
   flipCard();
 });
+
 
 
 function flipCard() {
