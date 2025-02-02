@@ -366,6 +366,9 @@ document.body.addEventListener('touchend', (e) => {
     if (deltaX < 0) {
       // Swipe left => mark correct
       markCardCorrect();
+    } else if (deltaX > 0) {
+      // Swipe right => undo last mark and go back one card
+      undoLastMark();
     }
   } else if (absDeltaY > absDeltaX && absDeltaY > threshold) {
     if (deltaY > 0) {
@@ -376,11 +379,14 @@ document.body.addEventListener('touchend', (e) => {
 });
 
 
+
 // **********************************
 // 11) Mark cards correct or incorrect
 // **********************************
 function markCardCorrect() {
   showCheckmark("✅", "limegreen");
+  // Record the user's mark in the card object
+  currentDeck[currentIndex].userMark = "correct";
   correctCount++;
   currentIndex++;
 
@@ -402,12 +408,50 @@ function markCardCorrect() {
 }
 
 
+
 function markCardIncorrect() {
   showCheckmark("✘", "red");
+  // Record the user's mark in the card object
+  currentDeck[currentIndex].userMark = "incorrect";
   incorrectDeck.push(currentDeck[currentIndex]);
   currentIndex++;
   updateCardContent();
 }
+
+function undoLastMark() {
+  // Check if there's a previous card to undo
+  if (currentIndex <= 0) {
+    console.warn("No previous card to undo.");
+    return;
+  }
+  // Move back one card
+  currentIndex--;
+  const previousCard = currentDeck[currentIndex];
+
+  // Undo the mark if it exists
+  if (previousCard.userMark === "correct") {
+    correctCount--;
+  } else if (previousCard.userMark === "incorrect") {
+    // Remove the card from the incorrectDeck (remove the last occurrence)
+    const idx = incorrectDeck.lastIndexOf(previousCard);
+    if (idx !== -1) {
+      incorrectDeck.splice(idx, 1);
+    }
+  }
+  // Clear the user's mark for this card
+  previousCard.userMark = undefined;
+
+  // Reset the card view to side1
+  currentSide = 1;
+  cardEl.style.transition = "none";
+  cardEl.style.transform = "rotateY(0deg)";
+  setTimeout(() => {
+    cardEl.style.transition = "transform 0.6s ease";
+  }, 50);
+
+  updateCardContent();
+}
+
 
 function showCheckmark(symbol, color) {
   const mark = document.createElement('div');
