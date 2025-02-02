@@ -207,37 +207,38 @@ function startDeck() {
 
 
 function updateCardContent() {
+  // Update the progress display at the start of every update
+  updateProgressDisplay();
+
   console.log("🃏 updateCardContent() called");
   console.log("📌 Current Index:", currentIndex);
   console.log("🃏 Current Deck Length:", currentDeck.length);
   // If we've gone through all cards in the current deck
   if (currentIndex >= currentDeck.length) {
-  console.warn("⚠️ No more cards left in the deck!");
-  // Hide the card container to avoid accidental taps on the last card
-  document.getElementById('card-container').style.display = "none";
-  // If all cards were marked correct, show the success screen
-  if (correctCount === currentDeck.length) {
-    successScreen.style.visibility = "visible";
-    successScreen.style.opacity = "1";
-  } else {
-    // Otherwise, show the score screen with the percentage
-    const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
-    scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
-    scoreScreen.style.display = "flex";  // use flex per the CSS defaults
-    scoreScreen.style.visibility = "visible";
-    scoreScreen.style.opacity = "1";
+    console.warn("⚠️ No more cards left in the deck!");
+    // Hide the card container to avoid accidental taps on the last card
+    document.getElementById('card-container').style.display = "none";
+    // If all cards were marked correct, show the success screen
+    if (correctCount === currentDeck.length) {
+      successScreen.style.visibility = "visible";
+      successScreen.style.opacity = "1";
+    } else {
+      // Otherwise, show the score screen with the percentage
+      const scorePercent = Math.floor((correctCount / currentDeck.length) * 100);
+      scoreText.textContent = `Score: ${correctCount} of ${currentDeck.length} = ${scorePercent}%`;
+      scoreScreen.style.display = "flex";  // use flex per the CSS defaults
+      scoreScreen.style.visibility = "visible";
+      scoreScreen.style.opacity = "1";
+    }
+    return;
   }
-  return;
-}
-
-
   const cardData = currentDeck[currentIndex];
   console.log("🎴 Card Data at Index:", cardData);
   console.log(`🔊 Audio URL for card #${currentIndex}:`, cardData.enAudio);
 
+  // (Continue with your existing code to update side1, side2, and side3...)
   side1El.textContent = cardData.jp;
 
-  // side2 with text + audio
   side2El.innerHTML = `
     <div>
       <p>${cardData.en}</p>
@@ -247,7 +248,6 @@ function updateCardContent() {
     </div>
   `;
 
-  // side3 with example sentences (without audio button)
   side3El.innerHTML = `
     <div>
       <p>${cardData.sentenceEn}</p>
@@ -256,12 +256,13 @@ function updateCardContent() {
   `;
 
   // Reset to side1 (Japanese) without initial animation
-currentSide = 1;
-cardEl.style.transition = "none";              // Disable transition
-cardEl.style.transform = "rotateY(0deg)";        // Set to side1 immediately
-void cardEl.offsetWidth;                         // Force reflow to apply the change instantly
-cardEl.style.transition = "transform 0.6s ease";  // Re-enable the transition for future flips
+  currentSide = 1;
+  cardEl.style.transition = "none";
+  cardEl.style.transform = "rotateY(0deg)";
+  void cardEl.offsetWidth;
+  cardEl.style.transition = "transform 0.6s ease";
 }
+
 
 
 // **********************************
@@ -471,6 +472,16 @@ function showCheckmark(symbol, color) {
   }, 1000);
 }
 
+function updateProgressDisplay() {
+  const progressTextEl = document.getElementById('progress-text');
+  if (!progressTextEl) return;
+  const total = currentDeck.length;
+  // Ensure we never exceed the total number of cards.
+  const progress = Math.min(currentIndex, total);
+  // Calculate success rate based on progress (avoid division by zero)
+  const successRate = progress > 0 ? Math.floor((correctCount / progress) * 100) : 0;
+  progressTextEl.textContent = `Progress: ${progress} / ${total}, Success: ${successRate}%`;
+}
 
 
 
