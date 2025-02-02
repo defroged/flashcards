@@ -480,7 +480,7 @@ function updateProgressDisplay() {
   const progress = Math.min(currentIndex, total);
   // Calculate success rate based on progress (avoid division by zero)
   const successRate = progress > 0 ? Math.floor((correctCount / progress) * 100) : 0;
-  progressTextEl.textContent = `Progress: ${progress} / ${total}, Success: ${successRate}%`;
+  progressTextEl.textContent = `${progress} / ${total}, 正解率: ${successRate}%`;
 }
 
 
