@@ -255,52 +255,14 @@ h2 {
 }
 
 /* Check Mark */
-/* Check Mark */
 .checkmark {
   position: absolute;
-  right: 10px; /* Position relative to the swipe-left container */
+  right: 10px;
   top: 8px;
   font-size: 1.2rem;
-  color: #32CD32; /* Green for correct */
+  color: #32CD32;
   opacity: 0;
-  animation: fade-in-sync 1.5s infinite ease-in-out; /* New animation */
-}
-
-/* X Mark */
-.xmark {
-  position: absolute;
-  left: 10px; /* Position relative to the swipe-down container */
-  bottom: 8px;
-  font-size: 1.2rem;
-  color: #FF0000; /* Red for incorrect */
-  opacity: 0;
-  animation: fade-in-out 1.5s infinite ease-in-out; /* Unchanged */
-}
-
-/* Left Arrow Animation */
-@keyframes swipe-left {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(40px); /* At most left position */
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-/* Down Arrow Animation */
-@keyframes swipe-down {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(40px); /* At most bottom position */
-  }
-  100% {
-    transform: translateY(0);
-  }
+  animation: fade-in-sync 1.5s infinite ease-in-out;
 }
 
 /* Synchronize Check Mark Visibility */
@@ -309,16 +271,57 @@ h2 {
     opacity: 0;
   }
   50%, 100% {
-    opacity: 1; /* Check mark appears at the same time as the arrow's most left position */
+    opacity: 1; /* Check mark appears when the arrow reaches its most left position */
   }
 }
 
-/* Fade-In-Out for X Mark (Unchanged) */
-@keyframes fade-in-out {
-  0%, 49% {
-    opacity: 0;
+
+
+/* X Mark */
+.xmark {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  font-size: 1.2rem;
+  color: #FF0000;
+  opacity: 0;
+  animation: fade-in-out 1.5s infinite ease-in-out;
+}
+
+/* Swipe Left Animation */
+@keyframes swipe-left {
+  0% {
+    transform: translateX(0);
   }
-  50%, 100% {
-    opacity: 1; /* X mark appears at the same time as the arrow's most bottom position */
+  50% {
+    transform: translateX(40px); /* Moves left */
+  }
+  100% {
+    transform: translateX(0);
   }
 }
+
+
+/* Swipe Down Animation */
+@keyframes swipe-down {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(40px); /* Moves down */
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Fade In-Out for Check/X Marks */
+@keyframes fade-in-out {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
