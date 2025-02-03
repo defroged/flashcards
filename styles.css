@@ -261,20 +261,18 @@ h2 {
   top: 0;
   font-size: 1.5rem;
   color: #32CD32;
-  opacity: 0;
-  animation: fade-in-out 1.5s infinite ease-in-out;
+  opacity: 1; /* Start fully visible */
+  animation: fade-in-out-inverse 1.5s infinite ease-in-out;
 }
 
-/* (Keep the existing fade-in-out keyframes unchanged)
-@keyframes fade-in-out {
+@keyframes fade-in-out-inverse {
   0%, 100% {
-    opacity: 0;
-  }
-  50% {
     opacity: 1;
   }
+  50% {
+    opacity: 0;
+  }
 }
-*/
 
 
 
