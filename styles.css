@@ -258,7 +258,7 @@ h2 {
 .start-checkmark {
   position: absolute;
   right: 30px; /* Move closer to center */
-  top: 8px;
+  top: 0;
   font-size: 1.5rem;
   color: #32CD32;
   opacity: 0;
@@ -266,43 +266,26 @@ h2 {
   animation: fade-in-sync-fix 1.5s infinite ease-in-out;
 }
 
-
-
-
-/* Fixed Check Mark Animation - Now Fades In Properly */
 @keyframes fade-in-sync-fix {
-  0%, 40% {
-    opacity: 0; /* Keep hidden before animation */
+  0%, 45% {
+    opacity: 0;
     transform: scale(0.8);
   }
-  41% {
-    opacity: 0.3;
-  }
-  45% {
-    opacity: 0.6;
-  }
   50% {
-    opacity: 1; /* Fully visible at the leftmost position */
+    opacity: 1;
     transform: scale(1);
   }
-  55% {
-    opacity: 1; /* Hold visibility briefly */
-  }
-  60% {
-    opacity: 0.8;
-  }
-  75% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 0; /* Smooth fade out */
+  55%, 100% {
+    opacity: 0;
+    transform: scale(0.8);
   }
 }
+
 
 /* X Mark */
 .xmark {
   position: absolute;
-  left: 10px;
+  left: 3px;
   bottom: 8px;
   font-size: 1.2rem;
   color: #FF0000;
