@@ -268,12 +268,16 @@ h2 {
 /* Synchronize Check Mark Visibility */
 @keyframes fade-in-sync {
   0%, 49% {
-    opacity: 0;
+    opacity: 0; /* Invisible before reaching 50% */
   }
-  50%, 100% {
-    opacity: 1; /* Check mark appears when the arrow reaches its most left position */
+  50% {
+    opacity: 1; /* Fully visible at the leftmost position */
+  }
+  100% {
+    opacity: 0; /* Fades out after animation completes */
   }
 }
+
 
 
 
