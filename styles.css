@@ -269,31 +269,35 @@ h2 {
 
 
 
-/* Fixed Check Mark Animation */
+/* Fixed Check Mark Animation - Now Fades In Properly */
 @keyframes fade-in-sync-fix {
-  0%, 45% {
-    opacity: 0; /* Stay hidden until near midpoint */
-    transform: scale(0.8); /* Subtle scaling effect */
+  0%, 40% {
+    opacity: 0; /* Keep hidden before animation */
+    transform: scale(0.8);
   }
-  46% {
-    opacity: 0.2;
+  41% {
+    opacity: 0.3;
   }
-  48% {
+  45% {
     opacity: 0.6;
   }
   50% {
-    opacity: 1; /* Fully visible at swipe's max position */
+    opacity: 1; /* Fully visible at the leftmost position */
     transform: scale(1);
   }
+  55% {
+    opacity: 1; /* Hold visibility briefly */
+  }
   60% {
-    opacity: 0.7; /* Gradually fades out */
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.4;
   }
   100% {
-    opacity: 0;
+    opacity: 0; /* Smooth fade out */
   }
 }
-
-
 
 /* X Mark */
 .xmark {
