@@ -262,24 +262,20 @@ h2 {
   font-size: 1.5rem;
   color: #32CD32;
   opacity: 0;
-  transform: scale(0.8);
-  animation: fade-in-sync-fix 1.5s infinite ease-in-out;
+  animation: fade-in-out 1.5s infinite ease-in-out;
 }
 
-@keyframes fade-in-sync-fix {
-  0%, 45% {
+/* (Keep the existing fade-in-out keyframes unchanged)
+@keyframes fade-in-out {
+  0%, 100% {
     opacity: 0;
-    transform: scale(0.8);
   }
   50% {
     opacity: 1;
-    transform: scale(1);
-  }
-  55%, 100% {
-    opacity: 0;
-    transform: scale(0.8);
   }
 }
+*/
+
 
 
 /* X Mark */
