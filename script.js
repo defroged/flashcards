@@ -487,12 +487,24 @@ function updateProgressDisplay() {
 
 // **********************************
 // 12) Kick things off on page load via Start button
-// **********************************
 document.getElementById('start-button').addEventListener('click', () => {
   // Hide the start screen
   document.getElementById('start-screen').style.display = "none";
+  // Hide the modal just in case it's open
+  document.getElementById('instructions-modal').style.display = "none";
   // Show the card container
   document.getElementById('card-container').style.display = "block";
   // Initialize the flashcards app
   init();
+});
+
+// 13) Show the instructions modal if やり方 button is clicked
+document.getElementById('help-button').addEventListener('click', () => {
+  // Show the instructions modal
+  document.getElementById('instructions-modal').style.display = "block";
+});
+
+// 14) Close the modal when the close-button (×) is clicked
+document.getElementById('close-instructions').addEventListener('click', () => {
+  document.getElementById('instructions-modal').style.display = "none";
 });
