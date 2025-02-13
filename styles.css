@@ -327,7 +327,7 @@ h2 {
 
 /* Modal styling */
 .modal {
-  /*! display: none; */ /* Hidden by default */
+  display: none; /* Hidden by default */
   position: fixed; 
   z-index: 9999; 
   left: 0; 
