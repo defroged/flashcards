@@ -182,15 +182,33 @@ h2 {
 
 #start-screen #start-button {
   padding: 10px 20px;
-  font-size: 24px;
+  font-size: 40px;
   cursor: pointer;
   background-color: #3a3ccc;
   color: #fff;
   border: none;
   border-radius: 8px;
   transition: background-color 0.3s ease, transform 0.3s ease;
+    margin: 15px;
 }
 
+#start-screen #help-button {
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: grey;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 15px;
+}
+
+#start-screen #help-button:hover {
+  background-color: #777;
+  transform: scale(1.05);    
+}
+  
 #start-screen #start-button:hover {
   background-color: #777;
   transform: scale(1.05);
