@@ -1,10 +1,3 @@
-// **********************************
-// 1) Firebase config & initialization
-// **********************************
-
-// (If you already have these scripts in your HTML, you do not need to add them again, 
-// but you do need to ensure these lines run somewhere in your JS.)
-
 const firebaseConfig = {
   apiKey: "AIzaSyCTdo6AfCDj3yVCnndBCIOrLRm7oOaDFW8",
   authDomain: "bs-class-database.firebaseapp.com",
@@ -19,50 +12,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // **********************************
-// 2) Fallback data if no slug is provided
-// **********************************
-const fallbackCardsData = [
-  {
-    jp: "ゾウ",
-    en: "elephant",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2022/07/elephant.mp3",
-    sentenceEn: "The elephant is drinking water from the river.",
-    sentenceJp: "ゾウが川の水を飲んでいます。"
-  },
-  {
-    jp: "犬",
-    en: "dog",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2022/07/dog.mp3",
-    sentenceEn: "The dog is catching the ball.",
-    sentenceJp: "犬がボールをキャッチしています。"
-  },
-  {
-    jp: "魚",
-    en: "fish",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2022/07/fish.mp3",
-    sentenceEn: "The fish is swimming in the pond.",
-    sentenceJp: "魚が池の中を泳いでいます。"
-  },
-  {
-    jp: "猫",
-    en: "cat",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2022/07/cat.mp3",
-    sentenceEn: "The cat is sleeping under the tree.",
-    sentenceJp: "猫が木の下で寝ています。"
-  },
-  // ... (rest of your hard‐coded objects) ...
-  {
-    jp: "跳ぶ",
-    en: "jumping",
-    enAudio: "https://www.bluestar-english.com/wp-content/uploads/2020/05/jumping.mp3",
-    sentenceEn: "The rabbit is jumping over the fence.",
-    sentenceJp: "ウサギがフェンスを飛び越えています。"
-  }
-];
-
-// **********************************
 // 3) Variables for deck management
-// **********************************
+
 let cardsData = [];
 let currentDeck = [];
 let incorrectDeck = [];
@@ -90,9 +41,7 @@ window.onload = () => {
 let touchStartX = 0;
 let touchStartY = 0;
 
-// **********************************
 // 4) Utility: shuffle array
-// **********************************
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -101,39 +50,30 @@ function shuffleArray(array) {
   return array;
 }
 
-// **********************************
 // 5) Main init flow
-// **********************************
-// ***********************
-// Replace init() and fetchDataFromFirestore():
-// ***********************
 
 async function init() {
-  // Get all path segments, ignoring empty ones
   const pathSegments = window.location.pathname.split("/").filter(Boolean);
 
-  // If we have at least 2 segments, we assume the first is "classSlug" and the second is "timeSlug"
   if (pathSegments.length >= 2) {
     const classSlug = pathSegments[0];
     const timeSlug = pathSegments[1];
 
-    // Attempt Firestore fetch with those slugs
     const fetchedData = await fetchDataFromFirestore(classSlug, timeSlug);
 
-    // If nothing returned, fallback to your hard-coded data
     if (fetchedData.length === 0) {
-      cardsData = fallbackCardsData;
-    } else {
-      cardsData = fetchedData;
+      alert("⚠️ データが見つかりませんでした。クラスと時間を確認してください。");
+      return;
     }
+
+    cardsData = fetchedData;
     startDeck();
-  } 
-  else {
-    // If we don’t have 2 segments, fallback to the hard-coded data
-    cardsData = fallbackCardsData;
-    startDeck();
+  } else {
+    alert("⚠️ URLが正しくありません。クラスと時間の情報が必要です。");
+    return;
   }
 }
+
 
 async function fetchDataFromFirestore(classSlug, timeSlug) {
   try {
@@ -164,12 +104,11 @@ vocabArray.forEach((item) => {
   results.push({
     jp: item.japanese || "",
     en: item.english || "",
-    enAudio: item.enAudio || "", // 🔥 Use the actual enAudio from Firestore!
+    enAudio: item.enAudio || "", 
     sentenceEn: item.englishExample || "",
     sentenceJp: item.japaneseExample || ""
   });
 });
-
 
     return results;
   } catch (error) {
@@ -178,11 +117,8 @@ vocabArray.forEach((item) => {
   }
 }
 
-
-
-// **********************************
 // 7) Once we have cardsData, build the deck
-// **********************************
+
 function startDeck() {
   console.log("🚀 startDeck() started");
   console.log("🔍 Current Deck Before Shuffle:", cardsData);
@@ -204,7 +140,6 @@ function startDeck() {
 
   updateCardContent();
 }
-
 
 function updateCardContent() {
   // Update the progress display at the start of every update
@@ -236,7 +171,6 @@ function updateCardContent() {
   console.log("🎴 Card Data at Index:", cardData);
   console.log(`🔊 Audio URL for card #${currentIndex}:`, cardData.enAudio);
 
-  // (Continue with your existing code to update side1, side2, and side3...)
   side1El.textContent = cardData.jp;
 
   side2El.innerHTML = `
@@ -263,11 +197,8 @@ function updateCardContent() {
   cardEl.style.transition = "transform 0.6s ease";
 }
 
-
-
-// **********************************
 // 8) Audio playback
-// **********************************
+
 function playAudio(url) {
   console.log("🎵 playAudio() called with URL:", url);
   if (!url) {
@@ -278,9 +209,8 @@ function playAudio(url) {
   audio.play();
 }
 
-// **********************************
 // 9) Tap/click events to flip or restart decks
-// **********************************
+
 document.body.addEventListener('click', (e) => {
   // If we are on the score screen and user taps:
   if (scoreScreen.style.display === "flex") {
@@ -316,7 +246,6 @@ document.body.addEventListener('click', (e) => {
 });
 
 
-
 function flipCard() {
   currentSide++;
   if (currentSide > 3) {
@@ -335,9 +264,8 @@ function flipCard() {
   }
 }
 
-// **********************************
 // 10) Touch events for swipe
-// **********************************
+
 document.body.addEventListener('touchstart', (e) => {
   // Disable swipe detection if score screen or success screen is active
   if (scoreScreen.style.display === "flex" || successScreen.style.visibility === "visible") {
@@ -379,11 +307,8 @@ document.body.addEventListener('touchend', (e) => {
   }
 });
 
-
-
-// **********************************
 // 11) Mark cards correct or incorrect
-// **********************************
+
 function markCardCorrect() {
   showCheckmark("✅", "limegreen");
   // Record the user's mark in the card object
@@ -407,8 +332,6 @@ function markCardCorrect() {
     }, 50);
   }
 }
-
-
 
 function markCardIncorrect() {
   showCheckmark("✘", "red");
@@ -453,15 +376,14 @@ function undoLastMark() {
   updateCardContent();
 }
 
-
 function showCheckmark(symbol, color) {
   const mark = document.createElement('div');
   mark.classList.add('checkmark');
 
   if (color === "red") {
-    mark.classList.add("incorrect"); // Explicitly setting incorrect class for X
+    mark.classList.add("incorrect"); 
   } else {
-    mark.classList.add("correct"); // Explicitly setting correct class for ✔
+    mark.classList.add("correct"); 
   }
 
   mark.textContent = symbol;
@@ -484,9 +406,8 @@ function updateProgressDisplay() {
 }
 
 
-
-// **********************************
 // 12) Kick things off on page load via Start button
+
 document.getElementById('start-button').addEventListener('click', () => {
   // Hide the start screen
   document.getElementById('start-screen').style.display = "none";
@@ -499,12 +420,14 @@ document.getElementById('start-button').addEventListener('click', () => {
 });
 
 // 13) Show the instructions modal if やり方 button is clicked
+
 document.getElementById('help-button').addEventListener('click', () => {
   // Show the instructions modal
   document.getElementById('instructions-modal').style.display = "block";
 });
 
 // 14) Close the modal when the close-button (×) is clicked
+
 document.getElementById('close-instructions').addEventListener('click', () => {
   document.getElementById('instructions-modal').style.display = "none";
 });
