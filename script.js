@@ -405,7 +405,6 @@ function updateProgressDisplay() {
   progressTextEl.textContent = `${progress} / ${total}, 正解率: ${successRate}%`;
 }
 
-
 // 12) Kick things off on page load via Start button
 
 document.getElementById('start-button').addEventListener('click', () => {
